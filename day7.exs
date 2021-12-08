@@ -1,4 +1,4 @@
-defmodule Advent.Day4 do
+defmodule Advent.Day7 do
   @moduledoc """
   Say we have 1, 5, 3 then we want to align
   all of them into a common value in the fewest number
@@ -74,18 +74,18 @@ nums =
   |> Enum.map(&String.to_integer/1)
 
 nums
-|> Advent.Day4.p1_compute_best_alignment 
+|> Advent.Day7.p1_compute_best_alignment 
 |> IO.inspect
 
 nums
-|> Advent.Day4.p2_compute_best_alignment 
+|> Advent.Day7.p2_compute_best_alignment 
 |> IO.inspect
 
 [16,1,2,0,4,2,7,1,2,14]
-|> Advent.Day4.p1_compute_best_alignment 
+|> Advent.Day7.p1_compute_best_alignment 
 |> IO.inspect
 
 [16,1,2,0,4,2,7,1,2,14]
-|> Advent.Day4.p2_compute_best_alignment 
+|> Advent.Day7.p2_compute_best_alignment 
 |> IO.inspect
 
