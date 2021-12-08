@@ -20,28 +20,72 @@ defmodule Advent.Day4 do
 
   First, we'll try to arrive at the same results as the fixture
   with a brute force solution, computing the min for every
-  possible alignment value in the list.
+  possible alignment value in the list. This brute force
+  approach is O(n^2), as worst case we have no repeated values
+  in the input and must iterate over the full input for every
+  unique value.
   """
-  def compute_best_alignment(data) do
-    nums =
-      data
-      |> String.trim
-      |> String.split(",")
-      |> Enum.map(&String.to_integer/1)
-    potential_alignments = nums |> Enum.uniq()
-    total_cost_by_aligment =
+  def p1_compute_best_alignment(nums) do
+    best_alignment(nums, &abs_value_cost/2)
+  end
+
+  def p2_compute_best_alignment(nums) do
+    best_alignment(nums, &arithmetic_sum_cost/2)
+  end
+
+  defp best_alignment(nums, cost_func) do
+    min = Enum.min(nums)
+    max = Enum.max(nums)
+    potential_alignments = min..max
+    total_costs =
       potential_alignments
       |> Enum.map(fn alignment -> 
         nums
-        |> Enum.reduce(0, &(&2 + Kernel.abs(&1 - alignment)))
+        |> Enum.reduce(0, fn (elem, acc) -> 
+          acc + cost_func.(elem, alignment) 
+        end)
       end)
     Enum.zip(
       potential_alignments,
-      total_cost_by_aligment
+      total_costs
     )
     |> Enum.min_by(fn ({_, cost}) -> cost end)
+  end
+
+  defp abs_value_cost(elem, alignment) do
+    Kernel.abs(elem - alignment)
+  end
+
+  defp arithmetic_sum_cost(elem, alignment) do
+    abs_cost = abs_value_cost(elem, alignment)
+    if abs_cost == 0 do
+      0
+    else
+      1..abs_cost |> Enum.sum
+    end
   end
 end
 
 {_, data} = File.read("/tmp/input.txt")
-data |> Advent.Day4.compute_best_alignment |> IO.inspect
+nums =
+  data
+  |> String.trim
+  |> String.split(",")
+  |> Enum.map(&String.to_integer/1)
+
+nums
+|> Advent.Day4.p1_compute_best_alignment 
+|> IO.inspect
+
+nums
+|> Advent.Day4.p2_compute_best_alignment 
+|> IO.inspect
+
+[16,1,2,0,4,2,7,1,2,14]
+|> Advent.Day4.p1_compute_best_alignment 
+|> IO.inspect
+
+[16,1,2,0,4,2,7,1,2,14]
+|> Advent.Day4.p2_compute_best_alignment 
+|> IO.inspect
+
