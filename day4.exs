@@ -33,9 +33,7 @@ defmodule Advent.Day4 do
       potential_alignments
       |> Enum.map(fn alignment -> 
         nums
-        |> Enum.reduce(0, fn (elem, acc) -> 
-          acc + Kernel.abs(elem - alignment)
-        end)
+        |> Enum.reduce(0, &(&2 + Kernel.abs(&1 - alignment)))
       end)
     Enum.zip(
       potential_alignments,
